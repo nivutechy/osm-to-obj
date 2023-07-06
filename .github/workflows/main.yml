@@ -13,12 +13,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     
-    - name: Set up Java
+    - name: Install JDK
       uses: actions/setup-java@v2
       with:
+        distribution: 'adopt'
         java-version: '14'
-        java-package: 'jdk'
-        architecture: 'x64'
 
     - name: Download and extract OSM2World
       run: |

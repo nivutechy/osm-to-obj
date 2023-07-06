@@ -16,13 +16,15 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
-        java-version: '16'
+        java-version: '20'
+        java-package: 'jdk'
+        architecture: 'x64'
 
     - name: Download and extract OSM2World
       run: |
         wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip
-        unzip OSM2World-latest-bin.zip -d OSM2World
-        cd OSM2World
+        unzip OSM2World-latest-bin.zip
+        cd OSM2World-*
         chmod +x osm2world.sh
         ./osm2world.sh -i ../map.osm -o ../map.obj
 

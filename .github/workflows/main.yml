@@ -1,0 +1,33 @@
+name: OSM to OBJ Conversion
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+    
+    - name: Convert OSM to OBJ
+      run: |
+        wget https://github.com/tordanik/OSM2World/releases/download/v3.2.0/OSM2World-3.2.0.zip
+        unzip OSM2World-3.2.0.zip
+        cd OSM2World-3.2.0
+        chmod +x osm2world.sh
+        ./osm2world.sh -i ../map.osm -o ../map.obj
+
+    - name: Upload OBJ artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: converted-obj
+        path: map.obj

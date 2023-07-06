@@ -17,6 +17,8 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '14'
+        java-package: 'jdk'
+        architecture: 'x64'
 
     - name: Download and extract OSM2World
       run: |

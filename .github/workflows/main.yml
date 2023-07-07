@@ -38,20 +38,24 @@ jobs:
       run: |
         # Perform texture creation steps here
         # You can use software like Blender, Substance Painter, or Photoshop to create textures for the model
+        # Update the path below to the location of the created textures
+        cp /path/to/created/textures/* .
 
     - name: Complete Model
       run: |
         # Perform model completion steps here
         # This can include UV unwrapping, texture mapping, material assignment, and any other necessary adjustments to make the model game-ready
+        # Update the path below to the location of the completed model
+        cp /path/to/completed/model/* .
 
     - name: Upload Game-Ready Model
       uses: actions/upload-artifact@v2
       with:
         name: game-ready-model
-        path: path/to/completed/model
+        path: .
 
     - name: Upload Textures
       uses: actions/upload-artifact@v2
       with:
         name: textures
-        path: path/to/created/textures
+        path: .

@@ -30,4 +30,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: 3d-world
-        path: world.obj
+        path: ./world.obj
+        if-no-files-found: warn

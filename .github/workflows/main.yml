@@ -26,9 +26,9 @@ jobs:
       run: |
         ./blender-2.93.1-linux-x64/blender --background --python-text "import bpy; bpy.ops.export_scene.obj(filepath='world.obj')"
 
-    - name: List Files
+    - name: Check Exported File
       run: |
-        ls
+        ls -l
         
     - name: Upload 3D World
       uses: actions/upload-artifact@v2

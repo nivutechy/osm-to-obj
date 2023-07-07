@@ -25,16 +25,33 @@ jobs:
         unzip OSM2World-latest-bin.zip -d OSM2World
         cd OSM2World
         chmod +x osm2world.sh
-
-        # Add the texture directory and configuration to the OSM2World directory
-        mkdir textures
-        cp /path/to/your/textures/* textures/
-        echo "texture.path = textures/" >> config.properties
+        
+        # Add the configuration options to config.properties
+        echo "feature.roads.enabled = true" >> config.properties
+        echo "feature.rivers.enabled = true" >> config.properties
+        echo "feature.buildings.enabled = true" >> config.properties
+        echo "feature.trees.enabled = true" >> config.properties
         
         ./osm2world.sh -i ../map.osm -o ../map.obj
 
-    - name: Upload OBJ artifact
+    - name: Create Textures
+      run: |
+        # Perform texture creation steps here
+        # You can use software like Blender, Substance Painter, or Photoshop to create textures for the model
+
+    - name: Complete Model
+      run: |
+        # Perform model completion steps here
+        # This can include UV unwrapping, texture mapping, material assignment, and any other necessary adjustments to make the model game-ready
+
+    - name: Upload Game-Ready Model
       uses: actions/upload-artifact@v2
       with:
-        name: converted-obj
-        path: map.obj
+        name: game-ready-model
+        path: path/to/completed/model
+
+    - name: Upload Textures
+      uses: actions/upload-artifact@v2
+      with:
+        name: textures
+        path: path/to/created/textures

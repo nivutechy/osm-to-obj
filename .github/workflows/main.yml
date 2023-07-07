@@ -34,10 +34,10 @@ jobs:
       run: |
         pwd
         
-    - name: Print Blender Log
+    - name: Print Blender Console Output
       run: |
-        cat ~/.config/blender/2.93/scripts/startup/bl_app_template_system_log.txt
-        
+        ./blender-2.93.1-linux-x64/blender --background --python-text "import bpy; bpy.ops.import_scene.osm(filepath='map.osm')" --debug --con
+    
     - name: Upload 3D World
       uses: actions/upload-artifact@v2
       with:

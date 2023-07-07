@@ -18,14 +18,21 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '20'
-
     - name: Download and extract OSM2World
       run: |
         wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip
         unzip OSM2World-latest-bin.zip -d OSM2World
         cd OSM2World
         chmod +x osm2world.sh
+        
+        # Add the configuration options to config.properties
+        echo "feature.roads.enabled = true" >> config.properties
+        echo "feature.rivers.enabled = true" >> config.properties
+        echo "feature.buildings.enabled = true" >> config.properties
+        echo "feature.trees.enabled = true" >> config.properties
+        
         ./osm2world.sh -i ../map.osm -o ../map.obj
+
     - name: Upload OBJ artifact
       uses: actions/upload-artifact@v2
       with:

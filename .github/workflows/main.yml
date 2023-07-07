@@ -1,4 +1,4 @@
-name: OSM to OBJ Conversion
+name: Create 3D World
 
 on:
   push:
@@ -6,56 +6,33 @@ on:
       - main
 
 jobs:
-  convert:
+  create_world:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     
-    - name: Install JDK
-      uses: actions/setup-java@v2
+    - name: Install Blender
+      uses: actions/setup-python@v2
       with:
-        distribution: 'adopt'
-        java-version: '20'
-
-    - name: Download and extract OSM2World
-      run: |
-        wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip
-        unzip OSM2World-latest-bin.zip -d OSM2World
-        cd OSM2World
-        chmod +x osm2world.sh
+        python-version: 3.x
         
-        # Add the configuration options to config.properties
-        echo "feature.roads.enabled = true" >> config.properties
-        echo "feature.rivers.enabled = true" >> config.properties
-        echo "feature.buildings.enabled = true" >> config.properties
-        echo "feature.trees.enabled = true" >> config.properties
+    - name: Install Blender-OSM Add-on
+      run: |
+        pip install bpy
+        blender --background --python-text "import bpy; bpy.ops.wm.addon_install(filepath='https://github.com/vvoovv/blender-osm/archive/master.zip')"
         
-        ./osm2world.sh -i ../map.osm -o ../map.obj
-
-    - name: Create Textures
+    - name: Create 3D World
       run: |
-        # Perform texture creation steps here
-        # You can use software like Blender, Substance Painter, or Photoshop to create textures for the model
-        # Update the path below to the location of the created textures
-        cp /path/to/created/textures/* .
-
-    - name: Complete Model
+        blender --background --python-text "import bpy; bpy.ops.import_scene.osm(filepath='map.osm')"
+        
+    - name: Export 3D World
       run: |
-        # Perform model completion steps here
-        # This can include UV unwrapping, texture mapping, material assignment, and any other necessary adjustments to make the model game-ready
-        # Update the path below to the location of the completed model
-        cp /path/to/completed/model/* .
+        blender --background --python-text "import bpy; bpy.ops.export_scene.obj(filepath='world.obj')"
 
-    - name: Upload Game-Ready Model
+    - name: Upload 3D World
       uses: actions/upload-artifact@v2
       with:
-        name: game-ready-model
-        path: .
-
-    - name: Upload Textures
-      uses: actions/upload-artifact@v2
-      with:
-        name: textures
-        path: .
+        name: 3d-world
+        path: world.obj

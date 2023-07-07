@@ -1,0 +1,72 @@
+name: OSM to OBJ Conversion
+
+on:
+
+  push:
+
+    branches:
+
+      - main
+
+jobs:
+
+  convert:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+
+        uses: actions/checkout@v2
+
+      - name: Download Blender
+
+        run: |
+
+          wget https://ftp.halifax.rwth-aachen.de/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz
+
+          tar -xf blender-3.6.0-linux-x64.tar.xz
+
+      - name: Install Python
+
+        uses: actions/setup-python@v2
+
+        with:
+
+          python-version: 3.x
+
+      - name: Install dependencies
+
+        run: |
+
+          python -m pip install bpy
+
+      - name: Run Blender with Blosm addon
+
+        run: |
+
+          ./blender-3.6.0-linux-x64/blender --background --python-expr "import bpy; bpy.ops.preferences.addon_install(filepath='blosm.zip')"
+
+          ./blender-3.6.0-linux-x64/blender --background --python-expr "import bpy; bpy.ops.preferences.addon_enable(module='blosm')"
+
+          ./blender-3.6.0-linux-x64/blender --background --python-expr "import bpy; bpy.ops.blosm.import_osm()"
+
+      - name: Move OBJ file to desired path
+
+        run: |
+
+          mkdir -p path/to/obj/
+
+          mv output.obj path/to/obj/
+
+      - name: Upload OBJ artifact
+
+        uses: actions/upload-artifact@v2
+
+        with:
+
+          name: converted-obj
+
+          path: path/to/obj/
+

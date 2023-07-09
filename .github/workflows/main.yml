@@ -17,15 +17,16 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '17'
+          java-version: '20'
 
-      - name: Download OSM2World JAR
+      - name: Download OSM2World
         run: |
-          wget https://github.com/tordanik/OSM2World/releases/download/v3.4.2/osm2world-core-3.4.2.jar -O osm2world.jar
+          wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip -O OSM2World-latest-bin.zip
+          unzip OSM2World-latest-bin.zip -d OSM2World
 
       - name: Convert OSM to OBJ
         run: |
-          java -jar osm2world.jar -i map.osm -o map.obj
+          java -jar OSM2World/osm2world.jar -i map.osm -o map.obj
 
       - name: Create Artifacts
         uses: actions/upload-artifact@v2

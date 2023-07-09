@@ -1,62 +1,47 @@
 name: OSM to OBJ Conversion
 
 on:
-
   push:
-
     branches:
-
       - main
 
 jobs:
-
   convert:
-
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Checkout repository
+      - name: Install JDK
+        uses: actions/setup-java@v2
+        with:
+         distribution: 'adopt'
+         java-version: '20'
+        
+      - name: Download OSM2World
+        run: |
+          wget https://github.com/OSM2World/OSM2World/releases/latest/download/osm2world.zip
+          unzip osm2world.zip
 
-      uses: actions/checkout@v2
+      - name: Install Osmosis
+        run: |
+          wget https://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.zip
+          unzip osmosis-latest.zip
 
-    - name: Set up Python
+      - name: Convert OSM to OBJ
+        run: |
+          ./osmosis-latest/bin/osmosis \
+            --read-xml file="*.osm" \
+            --tag-filter accept-ways building=* \
+            --tag-filter reject-relations \
+            --used-node \
+            --bounding-polygon file="manhattan_new-york.poly.txt" \
+            --write-xml file="manhattan-buildings.osm"
+          ./osm2world-*/osm2world.sh -i manhattan-buildings.osm -o manhattan.obj
 
-      uses: actions/setup-python@v2
-
-      with:
-
-        python-version: 3.x
-
-    - name: Install Blender
-
-      run: |
-
-        wget https://ftp.halifax.rwth-aachen.de/blender/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz
-
-        tar xf blender-3.6.0-linux-x64.tar.xz
-
-        rm blender-3.6.0-linux-x64.tar.xz
-
-    - name: Install Blender-blosm addon
-
-      run: |
-
-        unzip blosm.zip -d blender-3.6.0-linux-x64/3.6/scripts/addons/
-
-    - name: Convert OSM to OBJ
-
-      run: |
-
-        ./blender-3.6.0-linux-x64/blender --background --python convert.py
-
-    - name: Upload OBJ artifact
-
-      uses: actions/upload-artifact@v2
-
-      with:
-
-        name: converted-obj
-
-        path: map.obj
-
+      - name: Create Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: converted-3d-model
+          path: manhattan.obj

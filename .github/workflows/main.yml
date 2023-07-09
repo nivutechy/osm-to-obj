@@ -1,4 +1,4 @@
-name: Generate OBJ Artifact
+name: OSM to OBJ Conversion
 
 on:
   push:
@@ -6,27 +6,29 @@ on:
       - main
 
 jobs:
-  build:
+  convert:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Install JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
 
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'adopt'
+    - name: Download and extract OSM2World
+      run: |
+        wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip
+        unzip OSM2World-latest-bin.zip -d OSM2World
+        cd OSM2World
+        chmod +x osm2world.sh
+        ./osm2world.sh -i ../map.osm -o ../map.obj
 
-      - name: Build with OSM2World
-        run: |
-          wget https://osm2world.org/download/OSM2World.zip
-          unzip OSM2World.zip
-          java -jar OSM2World/osm2world.jar -i map.osm -o map.obj
-
-      - name: Create OBJ artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: map-obj
-          path: map.obj
+    - name: Upload OBJ artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: converted-obj
+        path: map.obj

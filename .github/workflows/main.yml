@@ -16,9 +16,9 @@ jobs:
       - name: Install JDK
         uses: actions/setup-java@v2
         with:
-         distribution: 'adopt'
-         java-version: '20'
-        
+          distribution: 'adopt'
+          java-version: '20'
+
       - name: Download and extract OSM2World
         run: |
           wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip
@@ -33,14 +33,14 @@ jobs:
 
       - name: Convert OSM to OBJ
         run: |
-          ./osmosis-latest/bin/osmosis \
+          ./osmosis-0.47/bin/osmosis \
             --read-xml file="*.osm" \
             --tag-filter accept-ways building=* \
             --tag-filter reject-relations \
             --used-node \
             --bounding-polygon file="manhattan_new-york.poly.txt" \
             --write-xml file="manhattan-buildings.osm"
-          ./osm2world-*/osm2world.sh -i manhattan-buildings.osm -o manhattan.obj
+          ./OSM2World/osm2world.sh -i manhattan-buildings.osm -o manhattan.obj
 
       - name: Create Artifact
         uses: actions/upload-artifact@v2

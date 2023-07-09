@@ -24,6 +24,10 @@ jobs:
           wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip -O OSM2World-latest-bin.zip
           unzip OSM2World-latest-bin.zip -d OSM2World
 
+      - name: Debug
+        run: |
+          ls OSM2World
+
       - name: Convert OSM to OBJ
         run: |
           java -jar OSM2World/osm2world.jar -i map.osm -o map.obj

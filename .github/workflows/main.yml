@@ -25,7 +25,7 @@ jobs:
         unzip OSM2World-latest-bin.zip -d OSM2World
         cd OSM2World
         chmod +x osm2world.sh
-        ./osm2world.sh -i ../map.osm -o ../map.obj
+        ./osm2world.sh -i ../map.osm -o ../map.obj --resolution 1920,1080
 
     - name: Modify OSM2World Configuration
       run: |

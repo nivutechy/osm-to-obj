@@ -19,10 +19,12 @@ jobs:
          distribution: 'adopt'
          java-version: '20'
         
-      - name: Download OSM2World
+      - name: Download and extract OSM2World
         run: |
-          wget https://github.com/OSM2World/OSM2World/releases/latest/download/osm2world.zip
-          unzip osm2world.zip
+          wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip
+          unzip OSM2World-latest-bin.zip -d OSM2World
+          cd OSM2World
+          chmod +x osm2world.sh
 
       - name: Install Osmosis
         run: |

@@ -19,19 +19,13 @@ jobs:
           distribution: 'adopt'
           java-version: '20'
 
-      - name: Build OSM2World
+      - name: Download OSM2World JAR
         run: |
-          git clone https://github.com/tordanik/OSM2World.git
-          cd OSM2World
-          wget https://github.com/tordanik/OSM2World/raw/master/gradlew
-          chmod +x gradlew
-          ./gradlew assemble
-
+          wget https://github.com/tordanik/OSM2World/releases/download/v3.4.2/osm2world-core-3.4.2.jar -O osm2world.jar
 
       - name: Convert OSM to OBJ
         run: |
-          cd OSM2World
-          ./gradlew run --args="-i ../map.osm -o ../map.obj"
+          java -jar osm2world.jar -i map.osm -o map.obj
 
       - name: Create Artifacts
         uses: actions/upload-artifact@v2

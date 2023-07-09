@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
-        java-version: '17'
+        java-version: '20'
 
     - name: Download and extract OSM2World
       run: |
@@ -26,6 +26,17 @@ jobs:
         cd OSM2World
         chmod +x osm2world.sh
         ./osm2world.sh -i ../map.osm -o ../map.obj
+
+    - name: Modify OSM2World Configuration
+      run: |
+        echo "draw_highway_residential = true" >> OSM2World/config.properties
+        echo "draw_highway_primary = true" >> OSM2World/config.properties
+        echo "draw_highway_secondary = true" >> OSM2World/config.properties
+        echo "draw_highway_tertiary = true" >> OSM2World/config.properties
+        echo "material_highway_residential_color = #808080" >> OSM2World/config.properties
+        echo "material_highway_primary_color = #FF0000" >> OSM2World/config.properties
+        echo "material_highway_secondary_color = #00FF00" >> OSM2World/config.properties
+        echo "material_highway_tertiary_color = #0000FF" >> OSM2World/config.properties
 
     - name: Upload OBJ artifact
       uses: actions/upload-artifact@v2

@@ -6,44 +6,32 @@ on:
       - main
 
 jobs:
-  convert:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Install JDK
+      - name: Set up Java
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '20'
 
-      - name: Download and extract OSM2World
+      - name: Build OSM2World
         run: |
-          wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip
-          unzip OSM2World-latest-bin.zip -d OSM2World
+          git clone https://github.com/tordanik/OSM2World.git
           cd OSM2World
-          chmod +x osm2world.sh
-
-      - name: Install Osmosis
-        run: |
-          wget https://bretth.dev.openstreetmap.org/osmosis-build/osmosis-0.47.zip
-          unzip osmosis-0.47.zip
+          ./gradlew assemble
 
       - name: Convert OSM to OBJ
         run: |
-          ./osmosis-0.47/bin/osmosis \
-            --read-xml file="*.osm" \
-            --tag-filter accept-ways building=* \
-            --tag-filter reject-relations \
-            --used-node \
-            --bounding-polygon file="manhattan_new-york.poly.txt" \
-            --write-xml file="manhattan-buildings.osm"
-          ./OSM2World/osm2world.sh -i manhattan-buildings.osm -o manhattan.obj
+          cd OSM2World
+          ./gradlew run --args="-i ../map.osm -o ../map.obj"
 
-      - name: Create Artifact
+      - name: Create Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: converted-3d-model
-          path: manhattan.obj
+          name: map-obj-artifact
+          path: map.obj

@@ -1,4 +1,4 @@
-name: OSM2World Workflow
+name: Generate OBJ Artifact
 
 on:
   push:
@@ -10,22 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          
-      - name: Checkout repository
-        uses: actions/checkout@v2
+          distribution: 'adopt'
 
-      - name: Build and run OSM2World
+      - name: Build with OSM2World
         run: |
-          wget https://osm2world.org/download/osm2world-latest.zip
-          unzip osm2world-latest.zip
+          wget https://osm2world.org/download/OSM2World.zip
+          unzip OSM2World.zip
           java -jar OSM2World/osm2world.jar -i map.osm -o map.obj
 
-      - name: Create artifact
+      - name: Create OBJ artifact
         uses: actions/upload-artifact@v2
         with:
-          name: OBJ File
+          name: map-obj
           path: map.obj

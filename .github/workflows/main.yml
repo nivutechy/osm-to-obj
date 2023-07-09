@@ -1,4 +1,4 @@
-name: OSM to OBJ Conversion
+name: OSM2World Workflow
 
 on:
   push:
@@ -10,30 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
-          java-version: '20'
+          java-version: '17'
+          
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Download OSM2World
+      - name: Build and run OSM2World
         run: |
-          wget https://osm2world.org/download/files/latest/OSM2World-latest-bin.zip -O OSM2World-latest-bin.zip
-          unzip OSM2World-latest-bin.zip -d OSM2World
-
-      - name: Debug
-        run: |
-          ls -R OSM2World
-
-      - name: Convert OSM to OBJ
-        run: |
+          wget https://osm2world.org/download/osm2world-latest.zip
+          unzip osm2world-latest.zip
           java -jar OSM2World/osm2world.jar -i map.osm -o map.obj
 
-      - name: Create Artifacts
+      - name: Create artifact
         uses: actions/upload-artifact@v2
         with:
-          name: map-obj-artifact
+          name: OBJ File
           path: map.obj

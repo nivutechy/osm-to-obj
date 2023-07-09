@@ -26,7 +26,7 @@ jobs:
 
       - name: Debug
         run: |
-          ls OSM2World
+          ls -R OSM2World
 
       - name: Convert OSM to OBJ
         run: |

@@ -28,8 +28,8 @@ jobs:
 
       - name: Install Osmosis
         run: |
-          wget https://bretth.dev.openstreetmap.org/osmosis-build/osmosis-latest.zip
-          unzip OSM2World-latest-bin.zip
+          wget https://bretth.dev.openstreetmap.org/osmosis-build/osmosis-0.47.zip
+          unzip osmosis-0.47.zip
 
       - name: Convert OSM to OBJ
         run: |

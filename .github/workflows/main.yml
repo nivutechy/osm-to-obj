@@ -25,18 +25,7 @@ jobs:
         unzip OSM2World-latest-bin.zip -d OSM2World
         cd OSM2World
         chmod +x osm2world.sh
-        ./osm2world.sh -i ../map.osm -o ../map.obj --resolution 1920,1080
-
-    - name: Modify OSM2World Configuration
-      run: |
-        echo "draw_highway_residential = true" >> OSM2World/config.properties
-        echo "draw_highway_primary = true" >> OSM2World/config.properties
-        echo "draw_highway_secondary = true" >> OSM2World/config.properties
-        echo "draw_highway_tertiary = true" >> OSM2World/config.properties
-        echo "material_highway_residential_color = #808080" >> OSM2World/config.properties
-        echo "material_highway_primary_color = #FF0000" >> OSM2World/config.properties
-        echo "material_highway_secondary_color = #00FF00" >> OSM2World/config.properties
-        echo "material_highway_tertiary_color = #0000FF" >> OSM2World/config.properties
+        ./osm2world.sh -i ../map.osm -o ../map.gltf
 
     - name: Upload OBJ artifact
       uses: actions/upload-artifact@v2

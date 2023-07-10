@@ -27,8 +27,8 @@ jobs:
         chmod +x osm2world.sh
         ./osm2world.sh -i ../map.osm -o ../map.gltf
 
-    - name: Upload OBJ artifact
+    - name: Upload GLTF artifact
       uses: actions/upload-artifact@v2
       with:
-        name: converted-obj
-        path: map.obj
+        name: converted-gltf
+        path: map.gltf

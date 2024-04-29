@@ -1,4 +1,4 @@
-name: OSM to OBJ Conversion
+name: OSM to OBJ conversion
 
 on:
   push:
